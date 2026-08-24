@@ -1,0 +1,22 @@
+# Production overrides: no source mounts, no reload, restart policies.
+services:
+  api:
+    build: ./backend
+    restart: always
+    env_file: .env
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 4
+    volumes: []
+  worker:
+    restart: always
+    volumes: []
+  beat:
+    restart: always
+    volumes: []
+  frontend:
+    restart: always
+  nginx:
+    restart: always
+    ports: ["80:80", "443:443"]
+    volumes:
+      - ./nginx/nginx.prod.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
